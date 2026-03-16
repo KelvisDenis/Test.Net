@@ -23,7 +23,7 @@ namespace Test.Subscriber.Core.Entitites
 
 
         public Subscriber() { }
-        public Subscriber( string name, string email, Guid subscriptionPlanId)
+        public Subscriber(string name, string email, Guid subscriptionPlanId)
         {
 
             Id = Guid.NewGuid();
@@ -54,9 +54,18 @@ namespace Test.Subscriber.Core.Entitites
             return Result<Subscriber>.Success(this);
         }
 
+        public void Update(string name, string email, Guid planId)
+        {
+            Name = name;
+            Email = email;
+            SubscriptionPlanId = planId;
+            UpdatedAt = DateTime.UtcNow;
+        }
 
-
-
-
+        public void DeactivateSubscription()
+        {
+            Status = PlanManagementEnum.Inactive;
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }
