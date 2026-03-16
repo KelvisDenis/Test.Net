@@ -1,5 +1,10 @@
+using Test.Subscriber.Application.Extensions;
+using Test.Subscriber.Infraestructure.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSubscriberInfrastructure(builder.Configuration);
+builder.Services.AddSubscriberApplication();
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -21,5 +26,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.AddSubscriberInfrastructure(app.Services);
 
 app.Run();

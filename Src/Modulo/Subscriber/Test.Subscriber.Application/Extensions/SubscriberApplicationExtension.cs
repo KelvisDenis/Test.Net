@@ -9,9 +9,9 @@ namespace Test.Subscriber.Application.Extensions
     {
         public static IServiceCollection AddSubscriberApplication(this IServiceCollection services)
         {
-                services.AddMapper();
-                SubscriberMapper.RegisterMapper();
-
+            services.AddMapper();
+            SubscriberMapper.RegisterMapper();
+            services.AddScoped<Business.SubscriberBusiness>();
 
             return services;
         }
