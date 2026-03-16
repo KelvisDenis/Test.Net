@@ -10,6 +10,8 @@ namespace Test.Subscriber.Infraestructure.Database.Repositories
         public async Task AddAsync(Core.Entitites.Subscriber subscriber)
         {
             await _context.Subscribers.AddAsync(subscriber);
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Core.Entitites.Subscriber?> GetByIdAsync(Guid id)
@@ -27,10 +29,11 @@ namespace Test.Subscriber.Infraestructure.Database.Repositories
                 .ToListAsync();
         }
 
-        public Task UpdateAsync(Core.Entitites.Subscriber subscriber)
+        public async Task UpdateAsync(Core.Entitites.Subscriber subscriber)
         {
             _context.Subscribers.Update(subscriber);
-            return Task.CompletedTask;
+            await _context.SaveChangesAsync();
+           
         }
 
         public async Task DeleteAsync(Guid id)
@@ -41,6 +44,8 @@ namespace Test.Subscriber.Infraestructure.Database.Repositories
             {
                 _context.Subscribers.Remove(subscriber);
             }
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> IsEmailRegisteredAsync(string email)
