@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Test.Subscriber.Core.Enums;
+using Test.Subscriber.Core.Helpers;
 
 namespace Test.Subscriber.Core.Entitites
 {
@@ -13,6 +15,7 @@ namespace Test.Subscriber.Core.Entitites
         public string Name { get; private set; }
         public string Email { get; private set; }
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+        public DateTime SubscriptionStartDate { get; private set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; private set; }
         public PlanManagementEnum Status { get; private set; }
         public SubscriptionPlan? SubscriptionPlan { get; private set; }
@@ -20,15 +23,40 @@ namespace Test.Subscriber.Core.Entitites
 
 
         public Subscriber() { }
-        public Subscriber( string name, string email, PlanManagementEnum status, Guid subscriptionPlanId)
+        public Subscriber( string name, string email, Guid subscriptionPlanId)
         {
 
             Id = Guid.NewGuid();
             Name = name;
             Email = email;
-            Status = status;
+            Status = PlanManagementEnum.Active;
             SubscriptionPlanId = subscriptionPlanId;
+            SubscriptionStartDate = DateTime.UtcNow;
         }
+
+        public Result<Subscriber> Validate()
+        {
+            if (string.IsNullOrWhiteSpace(Name))
+                return Result<Subscriber>.Failure("Name is required.");
+
+            if (string.IsNullOrWhiteSpace(Email))
+                return Result<Subscriber>.Failure("Email is required.");
+
+            if (!new EmailAddressAttribute().IsValid(Email))
+                return Result<Subscriber>.Failure("Invalid email format.");
+
+            if (SubscriptionStartDate > DateTime.UtcNow)
+                return Result<Subscriber>.Failure("Start date cannot be greater than current date.");
+
+            if (SubscriptionPlanId == Guid.Empty)
+                return Result<Subscriber>.Failure("Subscription plan is required.");
+
+            return Result<Subscriber>.Success(this);
+        }
+
+
+
+
 
     }
 }

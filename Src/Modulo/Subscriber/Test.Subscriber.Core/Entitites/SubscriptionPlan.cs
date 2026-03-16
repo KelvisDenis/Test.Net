@@ -15,8 +15,9 @@ namespace Test.Subscriber.Core.Entitites
 
         public decimal MonthlyPrice { get; private set; }
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; private set; }
+        public DateTime? UpdatedAt { get; private set; }
         public PlanManagementEnum Status { get; private set; }
+        public int DaysToExpire { get; private set; }
 
         public ICollection<Subscriber> Subscribers { get; private set; } = [];
 
